@@ -2,6 +2,8 @@
 
 import logging
 import ckan.plugins as p
+import ckanext.jsonpatch.logic.action as action
+import ckanext.jsonpatch.logic.auth as auth
 
 log = logging.getLogger(__name__)
 
@@ -14,24 +16,21 @@ class JSONPatchPlugin(p.SingletonPlugin):
     p.implements(p.IAuthFunctions)
 
     def get_actions(self):
-        return self._get_logic_functions('ckanext.jsonpatch.logic.action')
+        return {
+            'jsonpatch_create': action.jsonpatch_create,
+            'jsonpatch_update': action.jsonpatch_update,
+            'jsonpatch_delete': action.jsonpatch_delete,
+            'jsonpatch_show': action.jsonpatch_show,
+            'jsonpatch_list': action.jsonpatch_list,
+            'jsonpatch_apply': action.jsonpatch_apply,
+        }
 
     def get_auth_functions(self):
-        return self._get_logic_functions('ckanext.jsonpatch.logic.auth')
-
-    @staticmethod
-    def _get_logic_functions(module_root):
-
-        logic_functions = {}
-
-        for module_name in ['get', 'create', 'update', 'delete']:
-            module_path = '%s.%s' % (module_root, module_name,)
-            module = __import__(module_path)
-            for part in module_path.split('.')[1:]:
-                module = getattr(module, part)
-
-            for key, value in module.__dict__.items():
-                if not key.startswith('_') and hasattr(value, '__call__') and value.__module__ == module_path:
-                    logic_functions[key] = value
-
-        return logic_functions
+        return {
+            'jsonpatch_create': auth.jsonpatch_create,
+            'jsonpatch_update': auth.jsonpatch_update,
+            'jsonpatch_delete': auth.jsonpatch_delete,
+            'jsonpatch_show': auth.jsonpatch_show,
+            'jsonpatch_list': auth.jsonpatch_list,
+            'jsonpatch_apply': auth.jsonpatch_apply,
+        }
