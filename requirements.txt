@@ -1,2 +1,2 @@
-jsonpatch
-jsonpointer
+jsonpatch==1.23
+jsonpointer==2.0
