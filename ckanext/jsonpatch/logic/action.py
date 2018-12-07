@@ -255,6 +255,8 @@ def jsonpatch_apply(context, data_dict):
     :type object_id: string
     :param qualifier: apply only patches with the specified qualifier (optional, default: apply all)
     :type qualifier: string
+    :param kwargs: additional arguments to be passed in the data_dict to the 'xyz_show' action (optional)
+    :param kwargs: dictionary
 
     :returns: the patched object dict
     :rtype: dictionary
@@ -278,7 +280,9 @@ def jsonpatch_apply(context, data_dict):
     oplist = [operation for (operation,) in q.all()]
     patch = jsonpatch.JsonPatch(oplist)
 
-    object_dict = tk.get_action('{}_show'.format(model_name))(context, {'id': object_id})
+    show_params = data_dict.get('kwargs') or {}
+    show_params['id'] = object_id
+    object_dict = tk.get_action('{}_show'.format(model_name))(context, show_params)
     patched_dict = patch.apply(object_dict)
 
     return patched_dict
