@@ -18,8 +18,6 @@ def jsonpatch_create(context, data_dict):
     Create a new JSON Patch for some object. This consists of a single patch "operation" as
     per `Section 4`_ of `RFC6902`_.
 
-    :param id: the id of the JSON Patch (optional - only sysadmins can set this)
-    :type id: string
     :param model_name: this is the 'xyz' part of an 'xyz_show' action to which the patch will be applied
     :type model_name: string
     :param object_id: the id or name of the 'xyz' object

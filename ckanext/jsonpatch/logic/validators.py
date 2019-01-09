@@ -3,19 +3,8 @@
 import jsonpointer
 import json
 
-from ckanext.jsonpatch.model.jsonpatch import JSONPatch
 import ckan.plugins.toolkit as tk
 from ckan.common import _
-
-
-def jsonpatch_id_does_not_exist(jsonpatch_id):
-    if not jsonpatch_id:
-        return None
-
-    if JSONPatch.get(jsonpatch_id):
-        raise tk.Invalid("%s: %s" % (_("Already exists"), _("JSON Patch")))
-
-    return jsonpatch_id
 
 
 def jsonpatch_operation_validator(operation_dict):

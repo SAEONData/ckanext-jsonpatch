@@ -9,13 +9,12 @@ not_missing = tk.get_validator('not_missing')
 ignore = tk.get_validator('ignore')
 ignore_empty = tk.get_validator('ignore_empty')
 ignore_missing = tk.get_validator('ignore_missing')
-empty_if_not_sysadmin = tk.get_validator('empty_if_not_sysadmin')
 int_validator = tk.get_validator('int_validator')
 
 
 def jsonpatch_create_schema():
     schema = {
-        'id': [empty_if_not_sysadmin, ignore_missing, unicode, v.jsonpatch_id_does_not_exist],
+        'id': [ignore],
         'model_name': [not_missing, not_empty, unicode],
         'object_id': [not_missing, not_empty, unicode],
         'operation': [not_missing, not_empty, v.jsonpatch_operation_validator],
