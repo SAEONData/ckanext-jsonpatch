@@ -18,6 +18,8 @@ def jsonpatch_create(context, data_dict):
     Create a new JSON Patch for some object. This consists of a single patch "operation" as
     per `Section 4`_ of `RFC6902`_.
 
+    The structure of the returned dictionary may be customized by passing 'schema' in the context.
+
     :param model_name: this is the 'xyz' part of an 'xyz_show' action to which the patch will be applied
     :type model_name: string
     :param object_id: the id or name of the 'xyz' object
@@ -82,6 +84,8 @@ def jsonpatch_update(context, data_dict):
     :py:func:`~ckanext.jsonpatch.logic.action.jsonpatch_create`.
 
     Note: model_name and object_id cannot be modified.
+
+    The structure of the returned dictionary may be customized by passing 'schema' in the context.
 
     :param id: the id of the JSON Patch to update
     :type id: string
@@ -174,6 +178,8 @@ def jsonpatch_show(context, data_dict):
     """
     Return a JSON Patch definition.
 
+    The structure of the returned dictionary may be customized by passing 'schema' in the context.
+
     :param id: the id of the JSON Patch
     :type id: string
 
@@ -190,10 +196,11 @@ def jsonpatch_show(context, data_dict):
 
     tk.check_access('jsonpatch_show', context, data_dict)
 
+    output_schema = context.get('schema')
     context['jsonpatch'] = jsonpatch
     jsonpatch_dict = jsonpatch_dictize(jsonpatch, context)
 
-    result_dict, errors = tk.navl_validate(jsonpatch_dict, schema.jsonpatch_show_schema(), context)
+    result_dict, errors = tk.navl_validate(jsonpatch_dict, output_schema or schema.jsonpatch_show_schema(), context)
     return result_dict
 
 
@@ -201,6 +208,8 @@ def jsonpatch_show(context, data_dict):
 def jsonpatch_list(context, data_dict):
     """
     Return a list of ids of an object's JSON Patches, in the order in which they will be applied.
+
+    The structure of the returned dictionaries may be customized by passing 'schema' in the context.
 
     :param model_name: the 'xyz' part of the 'xyz_show' action to which the patches will be applied
     :type model_name: string
