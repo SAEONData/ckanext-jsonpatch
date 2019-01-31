@@ -8,7 +8,7 @@ dictionaries, using the JSON Patch mechanism described by [RFC6902](https://tool
 
 ## Requirements
 
-This extension has been developed and tested with CKAN version 2.7.4.
+This extension has been developed and tested with CKAN version 2.8.2.
 
 ## Installation
 
