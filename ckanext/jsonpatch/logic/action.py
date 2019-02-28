@@ -26,8 +26,8 @@ def jsonpatch_create(context, data_dict):
     :type object_id: string
     :param operation: the JSON Patch operation, e.g. { "op": "add", "path": "/a/b/c", "value": "foo" }
     :type operation: dictionary
-    :param qualifier: may be used to filter the patches that get applied under different scenarios (optional)
-    :type qualifier: string
+    :param scope: may be used to filter the patches that get applied under different scenarios (optional)
+    :type scope: string
     :param ordinal: set the order of the patch within the list of patches to be applied (optional: default ``0``);
         patches with equivalent ordinal values will be applied in timestamp (creation) order
     :type ordinal: integer
@@ -215,8 +215,8 @@ def jsonpatch_list(context, data_dict):
     :type model_name: string
     :param object_id: the id of the 'xyz' object
     :type object_id: string
-    :param qualifier: return only patches with the specified qualifier (optional, default: return all)
-    :type qualifier: string
+    :param scope: return only patches with the specified scope (optional, default: return all)
+    :type scope: string
     :param all_fields: return dictionaries instead of just ids (optional, default: ``False``)
     :type all_fields: boolean
 
@@ -228,7 +228,7 @@ def jsonpatch_list(context, data_dict):
     session = context['session']
 
     model_name, object_id = tk.get_or_bust(data_dict, ['model_name', 'object_id'])
-    qualifier = data_dict.get('qualifier')
+    scope = data_dict.get('scope')
     all_fields = asbool(data_dict.get('all_fields'))
 
     tk.check_access('jsonpatch_list', context, data_dict)
@@ -236,8 +236,8 @@ def jsonpatch_list(context, data_dict):
     q = session.query(JSONPatch.id) \
         .filter_by(model_name=model_name, object_id=object_id, state='active') \
         .order_by(JSONPatch.ordinal, JSONPatch.timestamp)
-    if qualifier:
-        q = q.filter_by(qualifier=qualifier)
+    if scope:
+        q = q.filter_by(scope=scope)
 
     jsonpatches = q.all()
     result = []
@@ -260,8 +260,8 @@ def jsonpatch_apply(context, data_dict):
     :type model_name: string
     :param object_id: the id of the 'xyz' object
     :type object_id: string
-    :param qualifier: apply only patches with the specified qualifier (optional, default: apply all)
-    :type qualifier: string
+    :param scope: apply only patches with the specified scope (optional, default: apply all)
+    :type scope: string
     :param kwargs: additional arguments to be passed in the data_dict to the 'xyz_show' action (optional)
     :param kwargs: dictionary
 
@@ -274,15 +274,15 @@ def jsonpatch_apply(context, data_dict):
     session = context['session']
 
     model_name, object_id = tk.get_or_bust(data_dict, ['model_name', 'object_id'])
-    qualifier = data_dict.get('qualifier')
+    scope = data_dict.get('scope')
 
     tk.check_access('jsonpatch_apply', context, data_dict)
 
     q = session.query(JSONPatch.operation) \
         .filter_by(model_name=model_name, object_id=object_id, state='active') \
         .order_by(JSONPatch.ordinal, JSONPatch.timestamp)
-    if qualifier:
-        q = q.filter_by(qualifier=qualifier)
+    if scope:
+        q = q.filter_by(scope=scope)
 
     oplist = [operation for (operation,) in q.all()]
     patch = jsonpatch.JsonPatch(oplist)

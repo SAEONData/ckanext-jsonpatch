@@ -13,7 +13,7 @@ jsonpatch_table = Table(
     Column('model_name', types.UnicodeText, nullable=False),
     Column('object_id', types.UnicodeText, nullable=False),
     Column('operation', _types.JsonDictType),
-    Column('qualifier', types.UnicodeText),
+    Column('scope', types.UnicodeText),
     Column('ordinal', types.Integer, nullable=False, default=0),
     Column('timestamp', types.DateTime, nullable=False, default=datetime.datetime.utcnow),
     Column('data', _types.JsonDictType),
