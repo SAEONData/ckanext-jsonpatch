@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-version = '0.4'
+version = '0.5'
 
 setup(
     name='ckanext-jsonpatch',
@@ -13,7 +13,7 @@ setup(
     author_email='mark@saeon.ac.za',
     license='MIT',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 2.7',
     ],
